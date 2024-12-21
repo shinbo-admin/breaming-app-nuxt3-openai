@@ -1,0 +1,40 @@
+html,
+body {
+  overflow: hidden;
+}
+
+body {
+  position: fixed;
+  width: 100%;
+}
+
+body *:not(code, code span) {
+  box-sizing: border-box;
+  font-family: 'Noto Sans JP';
+  user-select: none;
+}
+
+.Code {
+  font-size: 12px;
+  font-family: 'MS ゴシック';
+  padding: 0;
+  code {
+    padding: 0;
+    user-select: text !important;
+  }
+  pre code.hljs {
+    padding: 0 1rem 1rem !important;
+  }
+}
+
+div::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+div::-webkit-scrollbar-thumb {
+  border-radius: 9px;
+  background-color: rgb(158, 158, 158);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
