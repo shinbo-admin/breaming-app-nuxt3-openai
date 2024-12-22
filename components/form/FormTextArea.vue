@@ -4,6 +4,8 @@
       class="TextArea"
       :placeholder="placeholder"
       :style="{ padding: padding, fontSize: fontSize }"
+      :value="value"
+      @input="onChange"
     />
   </div>
 </template>
@@ -21,6 +23,7 @@ interface Props {
   fontSize?: string
   width?: string
   height?: string
+  value: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -29,13 +32,23 @@ const props = withDefaults(defineProps<Props>(), {
   fontSize: '18px',
 })
 
+const emits = defineEmits<{
+  (e: 'update:value', value: string): void
+}>()
+
 //------------------------------------------------------------------------------------------------------------
 // 定数・変数（state）
 //------------------------------------------------------------------------------------------------------------
+const input = ref('')
 
 //------------------------------------------------------------------------------------------------------------
-// ライフサイクル
+// Function
 //------------------------------------------------------------------------------------------------------------
+function onChange(e: Event) {
+  const target = e.target as HTMLInputElement
+  input.value = target?.value || ''
+  emits('update:value', input.value)
+}
 </script>
 
 <style lang="scss">

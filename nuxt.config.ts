@@ -5,8 +5,14 @@ export default defineNuxtConfig({
   css: ['@/assets/main.scss', '@mdi/font/css/materialdesignicons.min.css'],
   app: {
     head: {
-      meta: [{ charset: 'utf-8' }, { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      ],
       link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }],
     },
+  },
+  runtimeConfig: {
+    openaiApiKey: process.env.OPENAI_API_KEY,
   },
 })

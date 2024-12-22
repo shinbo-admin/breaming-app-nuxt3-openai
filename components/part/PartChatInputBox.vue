@@ -8,9 +8,9 @@
       borderRadius: radius,
     }"
   >
-    <FormTextArea :padding="'0px'" />
+    <FormTextArea :value="input" :padding="'0px'" @update:value="onChangeText" />
     <div class="Buttons">
-      <IconBase :icon="ICON_TYPE.SEND_OUTLINE" isHover />
+      <IconBase :icon="ICON_TYPE.SEND_OUTLINE" isHover @click="onClickSubmit" />
     </div>
   </div>
 </template>
@@ -37,13 +37,26 @@ const props = withDefaults(defineProps<Props>(), {
   radius: '20px',
 })
 
+const emits = defineEmits<{
+  (e: 'update:value', value: string): void
+}>()
+
 //------------------------------------------------------------------------------------------------------------
 // 定数・変数（state）
 //------------------------------------------------------------------------------------------------------------
+const input = ref('')
 
 //------------------------------------------------------------------------------------------------------------
-// ライフサイクル
+// Function
 //------------------------------------------------------------------------------------------------------------
+function onChangeText(value: string) {
+  input.value = value
+}
+
+function onClickSubmit() {
+  emits('update:value', input.value)
+  input.value = ''
+}
 </script>
 
 <style lang="scss">
