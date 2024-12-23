@@ -1,4 +1,6 @@
-export async function useGetOpenAi(postData: any) {
+import type { Data } from '~/types/common'
+
+export async function useGetOpenAi(postData: Data[]) {
   const data = useFetch('/api/openai', {
     method: 'POST',
     headers: {

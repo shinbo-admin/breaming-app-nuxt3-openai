@@ -8,9 +8,25 @@
       borderRadius: radius,
     }"
   >
-    <FormTextArea :value="input" :padding="'0px'" @update:value="onChangeText" />
+    <FormTextArea :value="input" :padding="'0px'" @update:value="onChangeMessage" />
     <div class="Buttons">
-      <IconBase :icon="ICON_TYPE.SEND_OUTLINE" isHover @click="onClickSubmit" />
+      <div class="LeftSide">
+        <IconBase
+          v-if="!isVoiceRecognition"
+          :icon="ICON_TYPE.CLOSE"
+          isHover
+          @click="onClearMessage"
+        />
+      </div>
+
+      <div v-if="!isVoiceRecognition" class="RightSide">
+        <IconBase v-if="isVoice" :icon="ICON_TYPE.VOICE" isHover @click="onStartVoice" />
+        <IconBase :icon="ICON_TYPE.SEND_OUTLINE" isHover @click="onSubmitMessage" />
+      </div>
+      <div v-else class="RightSide">
+        <IconBase :icon="ICON_TYPE.CANCEL" isHover @click="onCancelVoice" />
+        <IconBase :icon="ICON_TYPE.CHECK_OUTLINE" isHover @click="onSubmitVoice" />
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +45,7 @@ interface Props {
   height?: string
   padding?: string
   radius?: string
+  isVoice?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -39,23 +56,79 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits<{
   (e: 'update:value', value: string): void
+  (e: 'update:clear', value: boolean): void
+  (e: 'update:error', value: string): void
 }>()
 
 //------------------------------------------------------------------------------------------------------------
 // 定数・変数（state）
 //------------------------------------------------------------------------------------------------------------
 const input = ref('')
+const voiceMessage = ref('')
+const isVoiceRecognition = ref(false)
+const recognition = ref()
+
+//------------------------------------------------------------------------------------------------------------
+// マウント
+//------------------------------------------------------------------------------------------------------------
+onMounted(() => {
+  if (props.isVoice) {
+    // 音声認識の初期設定
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+      recognition.value = new SpeechRecognition()
+      recognition.value.lang = 'ja-JP'
+      recognition.value.interimResults = true
+      recognition.value.continuous = false
+    } else {
+      emits('update:error', 'このブラウザは音声認識をサポートしていません。')
+    }
+  }
+})
 
 //------------------------------------------------------------------------------------------------------------
 // Function
 //------------------------------------------------------------------------------------------------------------
-function onChangeText(value: string) {
+function onChangeMessage(value: string) {
   input.value = value
 }
 
-function onClickSubmit() {
+function onSubmitMessage() {
   emits('update:value', input.value)
   input.value = ''
+}
+
+function onClearMessage() {
+  emits('update:clear', true)
+  input.value = ''
+}
+
+function onStartVoice() {
+  isVoiceRecognition.value = true
+
+  if (!recognition) return
+  recognition.value.start()
+  recognition.value.onresult = (event: any) => {
+    const transcript = Array.from(event.results)
+      .map((result: any) => result[0].transcript)
+      .join('')
+
+    voiceMessage.value = transcript
+  }
+}
+
+function onSubmitVoice() {
+  recognition.value.stop()
+  input.value = voiceMessage.value
+  emits('update:value', input.value)
+  isVoiceRecognition.value = false
+}
+
+function onCancelVoice() {
+  recognition.value.stop()
+  input.value = ''
+  voiceMessage.value = ''
+  isVoiceRecognition.value = false
 }
 </script>
 
@@ -71,6 +144,10 @@ function onClickSubmit() {
 .Buttons {
   position: relative;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+
+.RightSide {
+  display: flex;
 }
 </style>
