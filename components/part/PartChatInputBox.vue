@@ -105,6 +105,7 @@ function onClearMessage() {
 
 function onStartVoice() {
   isVoiceRecognition.value = true
+  input.value = ''
 
   if (!recognition) return
   recognition.value.start()

@@ -26,6 +26,7 @@
 
 <script setup lang="ts">
 import { useFooterStore } from '~/stores/layout'
+import { useSpeechStore } from '~/stores/speech'
 import type { Data } from '~/types/common'
 
 /*===================================================================================================================
@@ -39,6 +40,7 @@ import type { Data } from '~/types/common'
 // 定数・変数（state）
 //------------------------------------------------------------------------------------------------------------
 const footer = useFooterStore()
+const speech = useSpeechStore()
 const data = ref<Data[]>([])
 
 //------------------------------------------------------------------------------------------------------------
@@ -60,6 +62,15 @@ async function onGetText(value: string) {
   const res = await useGetOpenAi(data.value)
   if (res.data.value?.status === 200) {
     if (res.data.value?.message) {
+      if (speech.value.isSpeech) {
+        const utterance = new SpeechSynthesisUtterance(res.data.value.message)
+        const voices = speechSynthesis.getVoices()
+        utterance.rate = 0.7 // 読み上げ速度
+        utterance.voice = voices[1] // 声色調整
+        utterance.lang = 'ja-JP' // 読み上げ言語
+        speechSynthesis.speak(utterance)
+      }
+
       data.value.push({ role: 'assistant', content: res.data.value.message })
       sessionStorage.setItem('chatData', JSON.stringify(data.value))
     }
