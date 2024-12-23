@@ -8,25 +8,6 @@ body {
   width: 100%;
 }
 
-body *:not(code, code span) {
-  box-sizing: border-box;
-  font-family: 'Noto Sans JP';
-  user-select: none;
-}
-
-.Code {
-  font-size: 12px;
-  font-family: 'MS ゴシック';
-  padding: 0;
-  code {
-    padding: 0;
-    user-select: text !important;
-  }
-  pre code.hljs {
-    padding: 0 1rem 1rem !important;
-  }
-}
-
 div::-webkit-scrollbar {
   width: 12px;
   height: 12px;
