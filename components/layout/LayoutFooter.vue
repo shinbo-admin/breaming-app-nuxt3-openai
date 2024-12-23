@@ -1,15 +1,23 @@
 <template>
   <div class="Footer" :style="{ height: `${footer.height}px` }">
-    <div class="FooterInner" :style="{ lineHeight: `${footer.height}px` }">
-      <div />
+    <div class="FooterInner">
+      <div style="height: 100%">
+        <v-switch
+          label="テーマ"
+          color="red-darken-3"
+          v-model="isDark"
+          density="compact"
+          @change="onChangeTheme"
+        />
+      </div>
       <div class="Center">copy right sh.maeda</div>
-      <div :style="{ height: `${footer.height}px` }">
+      <div style="height: 100%">
         <v-switch
           label="文章読み上げ"
           color="red-darken-3"
           v-model="isSpeech"
           density="compact"
-          @change="onChangeSwitch"
+          @change="onChangeSpeech"
         />
       </div>
     </div>
@@ -19,6 +27,7 @@
 <script setup lang="ts">
 import { useFooterStore } from '~/stores/layout'
 import { useSpeechStore } from '~/stores/speech'
+import { useTheme } from 'vuetify'
 /*===================================================================================================================
  *
  *===================================================================================================================*/
@@ -27,13 +36,19 @@ import { useSpeechStore } from '~/stores/speech'
 //------------------------------------------------------------------------------------------------------------
 const footer = useFooterStore()
 const speech = useSpeechStore()
+const theme = useTheme()
 const isSpeech = ref(false)
+const isDark = ref(false)
 
 //------------------------------------------------------------------------------------------------------------
 // Function
 //------------------------------------------------------------------------------------------------------------
-function onChangeSwitch() {
+function onChangeSpeech() {
   speech.value.isSpeech = isSpeech.value
+}
+
+function onChangeTheme() {
+  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
 }
 </script>
 
@@ -43,7 +58,7 @@ function onChangeSwitch() {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #20c77c;
+  background-color: rgb(var(--v-theme-footer));
 }
 
 .FooterInner {

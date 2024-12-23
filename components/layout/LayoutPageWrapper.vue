@@ -27,7 +27,7 @@ const footer = useFooterStore()
   position: fixed;
   left: 0;
   width: 100%;
-  background-color: #e1faeb;
+  background-color: rgb(var(--v-theme-background));
   overflow-y: hidden;
   overflow-x: hidden;
   padding: 20px;

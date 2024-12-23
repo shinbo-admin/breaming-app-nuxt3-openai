@@ -31,7 +31,7 @@ const header = useHeaderStore()
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #20c77c;
+  background-color: rgb(var(--v-theme-header));
 }
 
 .HeaderInner {
