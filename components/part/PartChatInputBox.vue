@@ -8,7 +8,20 @@
       borderRadius: radius,
     }"
   >
-    <FormTextArea :value="input" :padding="'0px'" @update:value="onChangeMessage" />
+    <div class="Content">
+      <FormTextArea
+        v-if="!isVoiceRecognition"
+        :value="input"
+        padding="0px"
+        height="80px"
+        @update:value="onChangeMessage"
+      />
+
+      <div v-else class="Progress">
+        <v-progress-linear color="deep-purple-accent-4" height="6" indeterminate rounded />
+      </div>
+    </div>
+
     <div class="Buttons">
       <div class="LeftSide">
         <IconBase
@@ -140,6 +153,18 @@ function onCancelVoice() {
   flex-direction: column;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.Content {
+  position: relative;
+  height: 80px;
+}
+
+.Progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .Buttons {
