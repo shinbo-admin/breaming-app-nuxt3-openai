@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
 
   const completion = await openai.chat.completions.create({
     model: 'gpt-4',
-    messages: [{ role: 'user', content: body }],
+    messages: body,
   })
 
   try {
