@@ -69,7 +69,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits<{
   (e: 'update:value', value: string): void
-  (e: 'update:clear', value: boolean): void
+  (e: 'update:isClear', value: boolean): void
   (e: 'update:error', value: string): void
 }>()
 
@@ -112,7 +112,7 @@ function onSubmitMessage() {
 }
 
 function onClearMessage() {
-  emits('update:clear', true)
+  emits('update:isClear', true)
   input.value = ''
 }
 
