@@ -9,7 +9,7 @@
           width: `calc(${header.height}px - 10px)`,
         }"
       />
-      <div>sh.maeda@aiqveone.co.jp</div>
+      <div>dummy@gmail.co.jp</div>
     </div>
   </div>
 </template>
